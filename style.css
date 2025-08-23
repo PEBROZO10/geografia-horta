@@ -1,0 +1,112 @@
+:root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --primary: #34d399;
+    --primary-hover: #059669;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --header: #1e293b;
+}
+
+body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 2rem;
+}
+
+h1 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.filtros {
+    margin-bottom: 1rem;
+}
+
+.filtros input {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 300px;
+    font-size: 1rem;
+    outline: none;
+    background: var(--card);
+    color: var(--text);
+    transition: 0.2s;
+}
+
+.filtros input::placeholder {
+    color: var(--muted);
+}
+
+.filtros input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.3);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+th, td {
+    padding: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background: #1e293b;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--primary);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: #334155;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 0.9em;
+    text-align: center;
+    padding: 1rem;
+}
+
+td img {
+    max-width: 80px;
+    max-height: 100px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+}
+
+td img:hover {
+    transform: scale(1.05);
+}

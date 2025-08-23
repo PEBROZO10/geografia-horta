@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Acervo de Livros</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Acervo de Livros</h1>
+  <div class="filtros">
+    <input id="filtro" type="text" placeholder="Filtrar por título, autor, palavra-chave...">
+  </div>
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th data-key="titulo">Título</th>
+        <th data-key="autor">Autor</th>
+        <th data-key="ano">Ano</th>
+        <th data-key="link">Link</th>
+        <th data-key="palavra_chave">Palavra-chave</th>
+        <th data-key="acervo">Acervo/Tombo</th>
+        <th data-key="imagem">Imagem</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    let livros = [];
+    let ordem = { key: null, dir: 1 };
+    const tbody = document.querySelector("#tabela tbody");
+    const filtro = document.getElementById("filtro");
+    function renderTabela(dados) {
+      tbody.innerHTML = "";
+      if (dados.length === 0) {
+        tbody.innerHTML = "<tr><td colspan='7' class='muted'>Nenhum resultado encontrado.</td></tr>";
+        return;
+      }
+      dados.forEach(livro => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${livro.titulo}</td>
+          <td>${livro.autor}</td>
+          <td>${livro.ano}</td>
+          <td><a href="${livro.link}" target="_blank">Abrir</a></td>
+          <td>${livro.palavra_chave}</td>
+          <td>${livro.acervo}</td>
+          <td>${livro.imagem ? `<img src="${livro.imagem}" alt="${livro.titulo}">` : "-"}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    function aplicarFiltro() {
+      const termo = filtro.value.toLowerCase();
+      const filtrados = livros.filter(l =>
+        l.titulo.toLowerCase().includes(termo) ||
+        l.autor.toLowerCase().includes(termo) ||
+        l.palavra_chave.toLowerCase().includes(termo) ||
+        String(l.ano).includes(termo) ||
+        l.acervo.toLowerCase().includes(termo)
+      );
+      renderTabela(filtrados);
+    }
+    function ordenar(coluna) {
+      if (ordem.key === coluna) {
+        ordem.dir *= -1;
+      } else {
+        ordem.key = coluna;
+        ordem.dir = 1;
+      }
+      livros.sort((a, b) => {
+        let va = a[coluna], vb = b[coluna];
+        if (typeof va === "number" && typeof vb === "number") {
+          return (va - vb) * ordem.dir;
+        }
+        return va.toString().localeCompare(vb.toString()) * ordem.dir;
+      });
+      aplicarFiltro();
+    }
+    filtro.addEventListener("input", aplicarFiltro);
+    document.querySelectorAll("th").forEach(th => {
+      th.addEventListener("click", () => ordenar(th.dataset.key));
+    });
+    fetch("./livros.json")
+      .then(res => res.json())
+      .then(data => {
+        livros = data;
+        renderTabela(livros);
+      })
+      .catch(err => {
+        console.error("Erro ao carregar livros.json:", err);
+        tbody.innerHTML = "<tr><td colspan='7' class='muted'>Arquivo livros.json não encontrado.</td></tr>";
+      });
+  </script>
+</body>
+</html>
